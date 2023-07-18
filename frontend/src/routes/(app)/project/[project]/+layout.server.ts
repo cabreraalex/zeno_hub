@@ -2,7 +2,7 @@ import { backendEndpoint } from '$lib/config.js';
 import { OpenAPI, ZenoService } from '$lib/zenoapi/index.js';
 import { error } from '@sveltejs/kit';
 
-export async function load({ params }) {
+export async function load({ params, url }) {
 	OpenAPI.BASE = backendEndpoint + '/api';
 	const projectConfig = await ZenoService.getProject(params.project);
 	if (!projectConfig) {
@@ -40,6 +40,7 @@ export async function load({ params }) {
 		models: models,
 		metrics: metrics,
 		folders: folders,
-		tags: tags
+		tags: tags,
+		url: url.pathname
 	};
 }

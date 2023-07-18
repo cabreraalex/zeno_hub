@@ -1,44 +1,47 @@
 <script lang="ts">
-	import { getEndpoint } from '$lib/config.js';
-	import {
-		columns,
-		folders,
-		metrics,
-		models,
-		projectConfig,
-		rowsPerPage,
-		slices,
-		tags
-	} from '$lib/stores';
-	import { OpenAPI as zenoAPI } from '$lib/zenoapi';
+  import { getEndpoint } from '$lib/config.js';
+  import {
+    columns,
+    folders,
+    metrics,
+    models,
+    projectConfig,
+    rowsPerPage,
+    slices,
+    tags
+  } from '$lib/stores';
+  import { OpenAPI as zenoAPI } from '$lib/zenoapi';
+  import { fade } from 'svelte/transition';
 
-	export let data;
+  export let data;
 
-	$: {
-		projectConfig.set(data.projectConfig);
-		rowsPerPage.set(data.projectConfig.numItems ?? 5);
-		slices.set(data.slices);
-		columns.set(data.columns);
-		models.set(data.models);
-		metrics.set(data.metrics);
-		folders.set(data.folders);
-		tags.set(data.tags);
-		zenoAPI.BASE = `${getEndpoint()}/api`;
-	}
+  $: {
+    projectConfig.set(data.projectConfig);
+    rowsPerPage.set(data.projectConfig.numItems ?? 5);
+    slices.set(data.slices);
+    columns.set(data.columns);
+    models.set(data.models);
+    metrics.set(data.metrics);
+    folders.set(data.folders);
+    tags.set(data.tags);
+    zenoAPI.BASE = `${getEndpoint()}/api`;
+  }
 </script>
 
-<div class="container">
-	<slot />
-</div>
+{#key data.url}
+  <div class="container" in:fade={{ duration: 300, delay: 400 }} out:fade={{ duration: 300 }}>
+    <slot />
+  </div>
+{/key}
 
 <style>
-	.container {
-		width: 100%;
-		height: 100%;
-		display: flex;
-	}
+  .container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+  }
 
-	* :global(.demo-list) {
-		max-width: 50px;
-	}
+  * :global(.demo-list) {
+    max-width: 50px;
+  }
 </style>
